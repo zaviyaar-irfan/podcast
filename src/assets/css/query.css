@@ -1,0 +1,159 @@
+@media (max-width: 1200px) {
+  .bannerHead {
+    font-size: 2.8rem;
+  }
+  .bannerSbhead {
+    font-size: 1.2rem;
+  }
+  .subCard00 {
+    font-size: 2rem;
+    margin-left: 4rem !important;
+  }
+  .bannerinerImg {
+    width: 20rem;
+    height: 20rem;
+  }
+  .subCardsb00 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .searchmain {
+    width: 100%;
+  }
+  .subCard00 {
+    font-size: 2rem;
+    margin-left: 0px !important;
+  }
+  .icondiv00 {
+    justify-content: center;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+  }
+  .arrowDivContact {
+    display: none;
+  }
+
+  .bannerHead {
+    font-size: 2.1rem;
+  }
+  .bannerSbhead {
+    font-size: 1rem;
+  }
+  .subCardsb00 {
+    font-size: 1.7rem;
+  }
+  .HeadIcondiv {
+    margin-left: 4rem;
+  }
+  .aboutArrow {
+    top: 8rem;
+    left: -5rem !important;
+  }
+  .aboutArrow svg {
+    width: 8rem;
+    height: 8rem;
+  }
+}
+
+/* quert 768 start */
+@media (max-width: 768px) {
+  .arrowDiv {
+    display: none;
+  }
+  .HeadIcondiv {
+    display: none;
+  }
+  .cardprem0 {
+    justify-content: flex-start;
+    margin-left: 4rem !important;
+  }
+  .skeltnimg00 {
+    padding-right: 0px !important;
+  }
+  .smBtn00 {
+    padding: 0px 4rem;
+  }
+
+  .bannerHead {
+    font-size: 2rem;
+  }
+  .bannerSbhead {
+    font-size: 0.7rem;
+  }
+
+  .captionHead {
+    padding: 0px 30px !important;
+    margin-top: 5.5rem;
+  }
+  .mainCarousel .carousel-caption {
+    right: 0;
+    left: 0;
+  }
+  .aboutArrow {
+    position: absolute;
+    top: -3rem;
+    left: 11rem !important;
+    transform: rotate(51deg);
+  }
+  .aboutArrow svg {
+    width: 8rem;
+    height: 8rem;
+  }
+  .bannerHead {
+    font-size: 2.2rem !important;
+  }
+  .artistMain00 {
+    width: 70% !important;
+  }
+}
+
+/* query 576 start */
+@media (max-width: 576px) {
+  .bannerHead {
+    font-size: 1.8rem;
+  }
+  .bannerSbhead {
+    font-size: 0.6rem;
+  }
+  .bannerHead {
+    font-size: 2rem !important;
+  }
+  .headIconAd {
+    right: 4rem;
+  }
+  .headTitle {
+    font-size: 1rem;
+  }
+  .logoICon {
+    width: 50px;
+    height: 50px;
+  }
+  .userImg00 {
+    width: 32px;
+    height: 32px;
+  }
+  .artistMain00 {
+    width: 100% !important;
+  }
+}
+
+/* query start 420  */
+@media (max-width: 420px) {
+  .headIconAd {
+    right: 18px;
+  }
+  .aboutArrow {
+    position: absolute;
+    top: -3rem;
+    left: 8rem !important;
+    transform: rotate(51deg);
+  }
+  .bannerHead {
+    font-size: 1.5rem !important;
+  }
+  .contactText {
+    font-size: 1.8rem !important;
+  }
+}

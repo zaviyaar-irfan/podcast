@@ -1,0 +1,711 @@
+:root {
+  --primary-color: #c80000 !important;
+  --color-1: #f5f5f5;
+  --color-2: #b9b9b9;
+  --color-3: #2e3031;
+  --color-4: #454545;
+}
+
+/* font family start */
+/* Fredoka font */
+@font-face {
+  font-family: "bold-font";
+  src: url(../font/Inter/Inter-Bold.ttf);
+}
+@font-face {
+  font-family: "semiBold-font";
+  src: url(../font/Inter/Inter-SemiBold.ttf);
+}
+@font-face {
+  font-family: "medium-font";
+  src: url(../font/Inter/Inter-Medium.ttf);
+}
+@font-face {
+  font-family: "regular-font";
+  src: url(../font/Inter/Inter-Regular.ttf);
+}
+@font-face {
+  font-family: "light-font";
+  src: url(../font/Inter/Inter-Light.ttf);
+}
+
+/* navbar css start */
+.logoICon {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  border-radius: 8px;
+  /* margin-top: 10px; */
+}
+.navicon {
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  justify-content: center;
+  /* padding: 18px; */
+  cursor: pointer;
+}
+.navicon svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: white;
+}
+.navbarLink {
+  font-family: "medium-font" !important;
+  color: var(--primary-color) !important;
+  font-size: 1.1rem !important;
+  height: 2rem !important;
+}
+.navbarLink .ant-space-item {
+  font-family: "medium-font" !important;
+  color: var(--primary-color) !important;
+  font-size: 1.1rem !important;
+  height: 2rem !important;
+}
+.navbarLink:hover {
+  border-bottom: 3px solid var(--primary-color);
+  padding-bottom: 6px;
+}
+.searchmain {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 40%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.mainsearc00 {
+  position: absolute;
+  top: 81px;
+  z-index: 9999;
+  width: 100%;
+  right: 0;
+  left: 0;
+  background-color: white;
+  padding: 20px 0px;
+}
+.navBar00 {
+  /* border-bottom: 1px solid var(--color-3); */
+  padding: 12px 12px;
+  background-color: #ffffff;
+  position: fixed !important;
+  width: 100% !important;
+  z-index: 9999 !important;
+  top: 0;
+}
+/* .naviner {
+  display: flex !important;
+  align-items: center !important;
+  flex-direction: row !important;
+} */
+
+.ant-dropdown-menu-title-content {
+  font-family: "regular-font";
+  font-size: 1rem;
+  color: var(--color-3);
+  cursor: pointer;
+}
+.ant-dropdown {
+  z-index: 99999 !important;
+}
+
+/* navbar css ended */
+
+/* auth css start */
+.googlbtn {
+  border: 2px solid var(--primary-color);
+  font-family: "bold-font" !important;
+  border-radius: 20px !important;
+  padding: 10px 10px !important;
+  text-align: center;
+  cursor: pointer;
+}
+.privcytext {
+  font-family: "medium-font" !important;
+  color: var(--color-3);
+  text-align: center;
+}
+.privcytext span {
+  color: var(--primary-color);
+  font-family: "bold-font" !important;
+}
+.textdiv {
+  font-family: "bold-font" !important;
+  color: #2e3031;
+}
+.divder00 {
+  background-color: var(--color-3);
+  height: 2px;
+  width: 100%;
+}
+.googlicon {
+  background: var(--primary-color);
+  border-radius: 50%;
+  padding: 5px;
+  width: 25px;
+  height: 25px;
+  color: white;
+  margin-right: 10px;
+}
+.tabHead00 {
+  border-bottom: 0px !important;
+  display: flex !important;
+  flex-flow: nowrap !important;
+}
+.tabHead00 li,
+.tabHead00 li button {
+  width: 100%;
+}
+.mainD {
+  align-items: center;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  overflow: scroll;
+}
+
+.cardB {
+  background-color: white !important;
+  border-radius: 20px !important;
+  box-shadow: 0 2px 32px 0 rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 27rem;
+  margin-top: 18rem;
+  padding: 2.5rem 2rem;
+}
+.inp_width {
+  width: 54px !important;
+  height: 54px !important;
+  border-color: black !important;
+}
+.resentext {
+  font-family: "medium-font";
+  cursor: pointer;
+  color: var(--color-4);
+  margin-left: 5px;
+}
+
+.sblg00 {
+  color: var(--primary-color);
+  font-family: "medium-font";
+  font-size: 0.8rem;
+}
+.mainTab00 {
+  /* background-color: #fff; */
+  border-radius: 20px;
+  /* box-shadow: 0 2px 32px 0 rgba(0, 0, 0, 0.04); */
+  margin-left: auto;
+  margin-right: auto;
+  width: 28rem;
+  margin-bottom: 7rem;
+}
+.bord {
+  border: 1px solid var(--color-3);
+  padding: 20px;
+  border-radius: 20px;
+}
+.formHead {
+  border-radius: 15px;
+}
+
+.pass_img {
+  position: absolute;
+  right: 8px;
+  cursor: pointer;
+}
+.sectionTop {
+  display: flex;
+  justify-content: center;
+}
+.sectionForget {
+  height: 93vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tabHead00 li .nav-link.active {
+  border: 0px !important;
+  background: var(--color-1);
+}
+.tabHead00 li .nav-link {
+  font-family: "regular-font";
+  color: black;
+  background: var(--color-8);
+  padding: 17px 0px;
+  border-radius: 0px !important;
+}
+.tabHead00 .nav-link:focus-visible,
+.tabHead00 .nav-item:focus-visible {
+  box-shadow: none !important;
+  outline: transparent !important;
+}
+.tabHead00 .nav-tabs .nav-link:focus,
+.nav-tabs .nav-link:hover {
+  border: transparent !important;
+  outline: transparent !important;
+}
+.loginBtn {
+  background-color: var(--primary-color) !important;
+  color: var(--color-1) !important;
+  font-family: "medium-font" !important;
+  border: 0px !important;
+  border-radius: 20px !important;
+  padding: 10px 10px !important;
+}
+.loginBtn2 {
+  background-color: var(--primary-color) !important;
+  color: var(--color-1) !important;
+  font-family: "medium-font" !important;
+  border: 0px !important;
+  border-radius: 20px !important;
+  padding: 2px 10px !important;
+}
+.devidedLine {
+  background: var(--color-9);
+  width: 100%;
+  display: block;
+  height: 1px;
+}
+.lableHead {
+  font-family: "semiBold-font";
+  font-size: 1rem;
+}
+.errorMsg {
+  color: red;
+  font-family: "light-font";
+  font-size: 0.9rem;
+}
+.forgettetx {
+  font-family: "regular-font";
+  font-family: 1rem;
+  color: black;
+}
+.forgtsbhead {
+  text-align: center;
+  font-family: "regular-font";
+  font-size: 1rem;
+}
+.forgthead {
+  text-align: center;
+  font-family: "medium-font";
+  font-size: 1.3rem;
+}
+.authHead {
+  font-family: "bold-font";
+  font-size: 2.2rem !important;
+}
+.loginHead {
+  font-family: "bold-font";
+  font-size: 1.7rem !important;
+}
+.loginsbHead {
+  font-family: "medium-font";
+  font-size: 1.1rem !important;
+}
+.nav-tabs .nav-link {
+  border: transparent !important;
+}
+.registerText {
+  font-family: "regular-font";
+  font-size: 0.8rem;
+  color: var(--primary-color);
+}
+/* auth css ended */
+
+/* home page css start */
+
+.disbalebtn {
+  opacity: 0.5 !important;
+}
+
+/* home scren css start */
+.mytabs .nav-item .nav-link.active {
+  background-color: var(--primary-color) !important;
+  color: white;
+  font-family: "medium-font";
+}
+.mytabs .nav-item .nav-link {
+  color: var(--color-3);
+  font-family: "medium-font";
+  display: flex;
+  align-items: center;
+}
+.mytabs .nav-item .nav-link svg {
+  width: 22px;
+  height: 22px;
+  margin-right: 10px;
+}
+.mytabs .nav-item .nav-link .nav-link.active svg {
+  color: white;
+}
+.headTitle {
+  color: var(--color-3);
+  font-family: "bold-font";
+  font-size: 1.7rem;
+}
+.headsbtitle {
+  color: var(--color-2);
+  font-family: "regular-font";
+  font-size: 1rem;
+}
+
+/* caresor css start */
+.cardImg {
+  object-fit: cover;
+  width: 100%;
+  height: 16rem;
+  border-radius: 8px;
+}
+
+.mainCard {
+  border-radius: 20px;
+  padding: 15px;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+/* .mainCard:hover {
+  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.08);
+} */
+
+.mainCard:hover .addCard00 {
+  display: block;
+  opacity: 2;
+  transform: translate(0, -10px);
+}
+.mainCard:hover .animated {
+  transform: scale(1.1);
+}
+.slick-dots {
+  display: none !important;
+}
+.my_slider .slick-prev,
+.my_slider .slick-next {
+  height: 52px !important;
+  top: 10rem !important;
+  background: white;
+  width: 50px;
+  border: 1px solid var(--color-3);
+  border-radius: 13px;
+  z-index: 999;
+  display: none !important;
+}
+.my_slider .slick-prev:before,
+.slick-next:before {
+  color: var(--color-2);
+}
+.my_slider .slick-next:before {
+  color: var(--color-2);
+}
+.cardHEad00 {
+  color: var(--color-3);
+  font-family: "semiBold-font";
+  font-size: 1.2rem;
+}
+.cardsbhead00 {
+  color: var(--color-4);
+  font-family: "regular-font";
+  font-size: 1rem;
+}
+.cardsbhead2 {
+  color: var(--color-2);
+  font-family: "light-font";
+  font-size: 0.8rem;
+}
+/* caresor css ende */
+
+.allsebtn {
+  color: var(--primary-color);
+  font-family: "semiBold-font";
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.livdiv {
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 10px;
+  position: absolute;
+  padding: 2px 8px;
+  right: 24px;
+  top: 25px;
+  z-index: 99999;
+  cursor: pointer;
+  font-family: "regular-font";
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+}
+/* home scren css emded */
+
+.profileDiv {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #b9b9b9;
+}
+
+.flex_center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.mainSectionDiv00 {
+  height: 100vh;
+  overflow: scroll;
+  padding-top: 6rem;
+}
+
+.username00 {
+  font-family: "semiBold-font";
+  color: var(--color-3);
+  font-size: 1.2rem;
+}
+
+.colHead00 {
+  position: sticky;
+  top: 6rem;
+}
+.sidebarIcon {
+  transition: transform 0.3s ease-in-out;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+.closebtn00 {
+  margin-left: 6rem;
+}
+.closebtn00 svg {
+  color: var(--color-3);
+  width: 20px;
+  height: 20px;
+}
+/* sidebar csss start */
+.sidebar {
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(-170%);
+  position: absolute;
+  z-index: 1040;
+  height: 100vh !important;
+  background: white;
+  border-right: 1px solid #ddd;
+}
+.sidebar.open {
+  transform: translateX(0);
+}
+.main-content.shifted {
+  width: 100%;
+}
+.smicdiv00 {
+  position: absolute;
+  top: 18px;
+}
+.userImg00 {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-2);
+  border-radius: 20px;
+}
+@media (min-width: 768px) {
+  .sidebar {
+    position: static;
+    transform: translateX(0);
+    height: auto;
+    background: none;
+    border: none;
+  }
+  .main-content {
+    width: auto;
+  }
+}
+
+.mytabs .nav-item a {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  font-family: "medium-font";
+  color: var(--color-3);
+}
+.mytabs .nav-item .active {
+  background: var(--primary-color);
+  border-radius: 8px;
+  color: white;
+}
+.mytabs .nav-item a svg {
+  margin-right: 10px;
+}
+
+/* sidebar css ended */
+
+/* skenlten css */
+.react-loading-skeleton {
+  height: 100%;
+  line-height: inherit !important;
+}
+
+/* detail artist css start */
+.detailartistimg {
+  width: 100%;
+  height: 20rem;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.artistMain00 {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.artisName00 {
+  color: var(--color-1);
+  font-family: "medium-font";
+  font-size: 1.7rem;
+}
+.sbName00 {
+  color: var(--color-1);
+  font-family: "regular-font";
+  font-size: 1rem;
+}
+.artisNamediv {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.playDiv00 {
+  background-color: var(--color-2);
+  width: fit-content;
+  border-radius: 20px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-family: "medium-font";
+  color: var(--color-3);
+}
+.playDiv00 svg {
+  color: var(--primary-color);
+  margin-right: 8px;
+}
+.downloddiv00 svg {
+  color: var(--color-1);
+}
+.downloddiv00 {
+  background-color: var(--primary-color);
+  padding: 5px 5px;
+  width: max-content;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.meniidv00 svg {
+  color: var(--primary-color);
+  cursor: pointer;
+}
+.songTitle00 {
+  font-family: "medium-font";
+  font-size: 1.2rem;
+  color: var(--color-3);
+}
+.songsbTitle00 {
+  font-family: "regular-font";
+  font-size: 0.9rem;
+  color: var(--color-4);
+}
+.songsbTitle00,
+.songTitle00 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  max-height: 3em; /* Adjust based on line-height */
+}
+.borderBcol {
+  border-bottom: 1px solid var(--color-2);
+  height: 100%;
+}
+/* detail artist css ended */
+
+/* play section csss start */
+.artistMain00 .rhap_play-pause-button svg {
+  color: var(--primary-color) !important;
+}
+/* play section csss ended */
+
+.imagDiv00 {
+  border: 1px solid var(--color-3);
+  border-radius: 12px;
+  min-height: 10rem;
+  max-height: 17rem;
+  position: relative;
+  overflow: scroll;
+}
+
+.imgupl00 {
+  border: 1px solid var(--color-3);
+  border-radius: 12px;
+  padding: 10px;
+}
+.dellMedia {
+  position: absolute;
+  right: -4px;
+  top: -8px;
+  z-index: 9999;
+}
+.imgupl00 {
+  border: 1px solid var(--color-3);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.uplodImg {
+  width: 100%;
+  height: 80px;
+  object-fit: contain;
+}
+
+.uplodImg {
+  width: 100%;
+  height: 80px;
+  object-fit: contain;
+}
+
+.uplodImg {
+  width: 100%;
+  height: 80px;
+  object-fit: contain;
+}
+
+.imgdiv00 {
+  height: 15rem;
+}
+
+.imgDiv00 input {
+  width: 100%;
+  height: 100%;
+}
+
+.imgDiv00 {
+  position: absolute;
+  left: 1rem;
+  /* top: 4rem; */
+  width: 100%;
+  opacity: 0;
+  height: 100%;
+}
+
+/* new css */
+
+.tableImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
