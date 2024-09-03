@@ -11,6 +11,8 @@ import AddblogCategory from "../Components/Screen/AddCategory/AddblogCategory";
 import AddBogs from "../Components/Screen/AddCategory/AddBogs";
 import BlogList from "../Components/Screen/AddCategory/BlogList";
 import Bannerlist from "../Components/Screen/AddCategory/Bannerlist";
+import AddChannels from "../Components/Screen/AddCategory/AddChannels";
+import ChannelList from "../Components/Screen/AddCategory/ChannelList";
 
 const Home = lazy(() => import("../Components/Screen/Home/index"));
 const Auth = lazy(() => import("../Components/Screen/Auth/Auth"));
@@ -84,6 +86,14 @@ const Router = () => {
         {
           path: "/Bannerlist",
           element: isAuthenticated ? <Bannerlist /> : <Navigate to="/" />,
+        },
+        {
+          path: "/AddChannels",
+          element: isAuthenticated ? <AddChannels /> : <Navigate to="/" />,
+        },
+        {
+          path: "/ChannelList",
+          element: isAuthenticated ? <ChannelList /> : <Navigate to="/" />,
         },
       ])}
     </Suspense>

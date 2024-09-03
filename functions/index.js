@@ -15,38 +15,38 @@ const paginate = (array, pageSize, pageNumber) => {
 
 exports.getPaginatedData = onRequest(async (req, res) => {
   try {
-      const { page, url } = req.query;
-      const response = await axios.get(url, {
-        headers: {
-          Accept: "application/xml",
-        },
-        timeout: 10000,
-      });
-      xml2js.parseString(response.data, (err, result) => {
-        if (err) {
-          console.error("Error parsing XML", err);
-          return res.status(500).send("Error parsing XML");
-        }
+    const { page, url } = req.query;
+    const response = await axios.get(url, {
+      headers: {
+        Accept: "application/xml",
+      },
+      timeout: 10000,
+    });
+    xml2js.parseString(response.data, (err, result) => {
+      if (err) {
+        console.error("Error parsing XML", err);
+        return res.status(500).send("Error parsing XML");
+      }
 
-        const items = result?.rss?.channel?.[0]?.item;
-        const descriptionHtml = result?.rss?.channel?.[0]?.description?.[0];
-        const pageNumber = parseInt(page) || 1;
-        const pageSize = 10;
-        const paginatedItems = paginate(items, pageSize, pageNumber);
+      const items = result?.rss?.channel?.[0]?.item;
+      const descriptionHtml = result?.rss?.channel?.[0]?.description?.[0];
+      const pageNumber = parseInt(page) || 1;
+      const pageSize = 10;
+      const paginatedItems = paginate(items, pageSize, pageNumber);
 
-        res.status(200).json({
-          page: pageNumber,
-          pageSize,
-          description: descriptionHtml,
-          totalItems: items.length,
-          totalPages: Math.ceil(items.length / pageSize),
-          data: paginatedItems,
-        });
+      res.status(200).json({
+        page: pageNumber,
+        pageSize,
+        description: descriptionHtml,
+        totalItems: items.length,
+        totalPages: Math.ceil(items.length / pageSize),
+        data: paginatedItems,
       });
-    } catch (error) {
-      console.error("Error calling external API", error);
-      res.status(500).send("Error calling external API");
-    }
+    });
+  } catch (error) {
+    console.error("Error calling external API", error);
+    res.status(500).send("Error calling external API");
+  }
 });
 
 const getChannelIdForCustom = async (name) => {
@@ -76,13 +76,15 @@ exports.addChannel = onRequest(async (req, res) => {
       const parts = channelLink.split("/");
       const channelSlug = parts[parts.length - 1];
       var channelId = channelSlug;
-      if (channelSlug.includes('@')) {
-        channelId=await getChannelIdForCustom(channelSlug)
+      if (channelSlug.includes("@")) {
+        channelId = await getChannelIdForCustom(channelSlug);
       }
       if (!name || !channelLink || !channelId) {
         return res.status(400).send("Name and channelLink are required");
       }
-      const docRef = await db.collection("channels").add({ name, channelLink:channelId });
+      const docRef = await db
+        .collection("channels")
+        .add({ name, channelLink: channelId });
       res.status(201).send("Document added Successfully");
     } catch (error) {
       console.error("Error adding channel:", error);
@@ -228,7 +230,7 @@ exports.scheduledFetchVideos = functions.pubsub
         const channelVideos = await fetchChannelRSSFeed(channelId);
         videoData.push(...channelVideos);
       }
-      console.log("Videos",videoData);
+      console.log("Videos", videoData);
       const sortedData = videoData.sort(
         (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
       );
@@ -263,11 +265,14 @@ exports.getPaginatedVideos = onRequest(async (req, res) => {
 
       const snapshot = await query.get();
 
-      const videos = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const videos = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
-      res.status(200).json({ videos:videos, totalPages:totalPages });
+      res.status(200).json({ videos: videos, totalPages: totalPages });
     } catch (error) {
       res.status(500).send("Error retrieving videos: " + error.message);
     }
-  })
+  });
 });
