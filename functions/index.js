@@ -7,6 +7,8 @@ const xml2js = require("xml2js");
 const cors = require("cors")({ origin: true });
 const functions = require("firebase-functions");
 
+const API_KEY = "AIzaSyDwRHpWwtp7Xk4zol_XYzTPeYFnYXE98Ic";
+
 const paginate = (array, pageSize, pageNumber) => {
   return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
 };
@@ -47,14 +49,40 @@ exports.getPaginatedData = onRequest(async (req, res) => {
     }
 });
 
+const getChannelIdForCustom = async (name) => {
+  const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=${encodeURIComponent(
+    name
+  )}&key=${API_KEY}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    if (data.items && data.items.length > 0) {
+      return data.items[0].id.channelId;
+    } else {
+      console.log("No channels found with that name.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching channel ID:", error);
+    return null;
+  }
+};
+
 exports.addChannel = onRequest(async (req, res) => {
   cors(req, res, async () => {
     try {
       const { name, channelLink } = req.body;
-      if (!name || !channelLink) {
+      const parts = channelLink.split("/");
+      const channelSlug = parts[parts.length - 1];
+      var channelId = channelSlug;
+      if (channelSlug.includes('@')) {
+        channelId=await getChannelIdForCustom(channelSlug)
+      }
+      if (!name || !channelLink || !channelId) {
         return res.status(400).send("Name and channelLink are required");
       }
-      const docRef = await db.collection("channels").add({ name, channelLink });
+      const docRef = await db.collection("channels").add({ name, channelLink:channelId });
       res.status(201).send("Document added Successfully");
     } catch (error) {
       console.error("Error adding channel:", error);
