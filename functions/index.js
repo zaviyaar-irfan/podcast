@@ -15,38 +15,38 @@ const paginate = (array, pageSize, pageNumber) => {
 
 exports.getPaginatedData = onRequest(async (req, res) => {
   try {
-      const { page, url } = req.query;
-      const response = await axios.get(url, {
-        headers: {
-          Accept: "application/xml",
-        },
-        timeout: 10000,
-      });
-      xml2js.parseString(response.data, (err, result) => {
-        if (err) {
-          console.error("Error parsing XML", err);
-          return res.status(500).send("Error parsing XML");
-        }
+    const { page, url } = req.query;
+    const response = await axios.get(url, {
+      headers: {
+        Accept: "application/xml",
+      },
+      timeout: 10000,
+    });
+    xml2js.parseString(response.data, (err, result) => {
+      if (err) {
+        console.error("Error parsing XML", err);
+        return res.status(500).send("Error parsing XML");
+      }
 
-        const items = result?.rss?.channel?.[0]?.item;
-        const descriptionHtml = result?.rss?.channel?.[0]?.description?.[0];
-        const pageNumber = parseInt(page) || 1;
-        const pageSize = 10;
-        const paginatedItems = paginate(items, pageSize, pageNumber);
+      const items = result?.rss?.channel?.[0]?.item;
+      const descriptionHtml = result?.rss?.channel?.[0]?.description?.[0];
+      const pageNumber = parseInt(page) || 1;
+      const pageSize = 10;
+      const paginatedItems = paginate(items, pageSize, pageNumber);
 
-        res.status(200).json({
-          page: pageNumber,
-          pageSize,
-          description: descriptionHtml,
-          totalItems: items.length,
-          totalPages: Math.ceil(items.length / pageSize),
-          data: paginatedItems,
-        });
+      res.status(200).json({
+        page: pageNumber,
+        pageSize,
+        description: descriptionHtml,
+        totalItems: items.length,
+        totalPages: Math.ceil(items.length / pageSize),
+        data: paginatedItems,
       });
-    } catch (error) {
-      console.error("Error calling external API", error);
-      res.status(500).send("Error calling external API");
-    }
+    });
+  } catch (error) {
+    console.error("Error calling external API", error);
+    res.status(500).send("Error calling external API");
+  }
 });
 
 const getChannelIdForCustom = async (name) => {
@@ -76,13 +76,15 @@ exports.addChannel = onRequest(async (req, res) => {
       const parts = channelLink.split("/");
       const channelSlug = parts[parts.length - 1];
       var channelId = channelSlug;
-      if (channelSlug.includes('@')) {
-        channelId=await getChannelIdForCustom(channelSlug)
+      if (channelSlug.includes("@")) {
+        channelId = await getChannelIdForCustom(channelSlug);
       }
       if (!name || !channelLink || !channelId) {
         return res.status(400).send("Name and channelLink are required");
       }
-      const docRef = await db.collection("channels").add({ name, channelLink:channelId });
+      const docRef = await db
+        .collection("channels")
+        .add({ name, channelLink: channelId });
       res.status(201).send("Document added Successfully");
     } catch (error) {
       console.error("Error adding channel:", error);
@@ -228,7 +230,7 @@ exports.scheduledFetchVideos = functions.pubsub
         const channelVideos = await fetchChannelRSSFeed(channelId);
         videoData.push(...channelVideos);
       }
-      console.log("Videos",videoData);
+      console.log("Videos", videoData);
       const sortedData = videoData.sort(
         (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
       );
@@ -263,11 +265,198 @@ exports.getPaginatedVideos = onRequest(async (req, res) => {
 
       const snapshot = await query.get();
 
-      const videos = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const videos = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
-      res.status(200).json({ videos:videos, totalPages:totalPages });
+      res.status(200).json({ videos: videos, totalPages: totalPages });
     } catch (error) {
       res.status(500).send("Error retrieving videos: " + error.message);
     }
-  })
+  });
+});
+
+const fetchDataFromUrls = async (url) => {
+  try {
+    const headers = {
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+      Accept: "application/xml",
+    };
+
+    const response = await axios.get(url, { headers });
+
+    const parsedData = await new Promise((resolve, reject) => {
+      xml2js.parseString(response.data, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result.rss.channel[0].item?.slice(0, 3));
+        }
+      });
+    });
+    return parsedData;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+const clearBlogsDataInDB = async () => {
+  const snapshot = await db.collection("blogsDownloads").get();
+
+  const batch = db.batch();
+  snapshot.docs.forEach((doc) => {
+    batch.delete(doc.ref); // Mark each document for deletion
+  });
+
+  await batch.commit(); // Commit the batch to delete all documents
+  console.log("All previous video data cleared from the database");
+};
+
+exports.scheduledFetchBlogs = functions.pubsub
+  .schedule("every 15 minutes")
+  .onRun(async (context) => {
+    console.log("Fetching blogs");
+
+    try {
+      const snapshot = await db.collection("BlogCollection").get();
+      console.log("Blog documents retrieved:", snapshot.size);
+
+      const blogUrls = snapshot.docs.map((doc) => ({
+        name: doc.data().category.name,
+        url: doc.data().url,
+      }));
+
+      console.log("Blog URLs:", blogUrls);
+
+      const fetchPromises = blogUrls.map(async (blogUrl) => {
+        const url = blogUrl?.url;
+
+        if (url.endsWith("/feed") || url.endsWith("/feed/")) {
+          try {
+            const resp = await fetchDataFromUrls(url); // Fetch the articles from the feed
+            const category = blogUrl.name;
+
+            // Use the category name as the document ID
+            const categoryDocRef = db
+              .collection("blogsDownloads")
+              .doc(category);
+
+            const categoryDoc = await categoryDocRef.get();
+
+            if (categoryDoc.exists) {
+              const existingArticles = categoryDoc.data().articles || [];
+
+              // Filter out articles that already exist based on 'link'
+              const existingLinks = new Set(
+                existingArticles.map((article) => article.link[0])
+              );
+              const newArticles = resp.filter(
+                (article) => !existingLinks.has(article.link[0])
+              );
+
+              // Update the articles in the category
+              const updatedArticles = [...existingArticles, ...newArticles];
+
+              await categoryDocRef.update({
+                articles: updatedArticles,
+              });
+
+              console.log(
+                `Appended ${newArticles.length} new articles to category: ${category}`
+              );
+            } else {
+              // If no document exists for this category, create a new one
+              await categoryDocRef.set({
+                category: category,
+                articles: resp,
+              });
+
+              console.log(`Created new category entry for: ${category}`);
+            }
+          } catch (error) {
+            console.error(`Error fetching data from ${url}:`, error);
+          }
+        }
+      });
+
+      // Wait for all fetch operations to complete
+      await Promise.all(fetchPromises);
+      console.log("Finished fetching and updating blogs.");
+    } catch (error) {
+      console.error("Error during blog fetching:", error);
+    }
+
+    return null;
+  });
+
+exports.getPaginatedBlogs = onRequest(async (req, res) => {
+  cors(req, res, async () => {
+    try {
+      const { page = 1, category } = req.query;
+      const pageSize = 10;
+
+      if (category) {
+        const categorySnapshot = await db
+          .collection("blogsDownloads")
+          .where("category", "==", category)
+          .get();
+
+        if (!categorySnapshot.empty) {
+          const categoryDoc = categorySnapshot.docs[0];
+          const existingArticles = categoryDoc.data().articles || [];
+          console.log("Existing articles for category:", existingArticles);
+          const totalDocuments = existingArticles.length;
+          const totalPages = Math.ceil(totalDocuments / pageSize);
+          const skip = (Number(page) - 1) * pageSize;
+          existingArticles.sort((a, b) => {
+            const dateA = new Date(a.pubDate); 
+            const dateB = new Date(b.pubDate); 
+            return dateB - dateA; 
+          });
+          const paginatedArticles = existingArticles.slice(
+            skip,
+            skip + pageSize
+          );
+          res.status(200).json({
+            articles: paginatedArticles,
+            totalPages: totalPages,
+          });
+        } else {
+          res.status(200).json({
+            articles: [],
+            totalPages: 0,
+          });
+        }
+      } else {
+        const allSnapshots = await db.collection("blogsDownloads").get();
+        let allArticles = [];
+
+        allSnapshots.forEach((doc) => {
+          const articles = doc.data().articles || [];
+          allArticles = [...allArticles, ...articles]; 
+        });
+
+        allArticles.sort((a, b) => {
+          const dateA = new Date(a.pubDate);
+          const dateB = new Date(b.pubDate);
+          return dateB - dateA; 
+        });
+
+        const totalDocuments = allArticles.length;
+        const totalPages = Math.ceil(totalDocuments / pageSize);
+        const skip = (Number(page) - 1) * pageSize;
+        const paginatedArticles = allArticles.slice(skip, skip + pageSize);
+
+        res.status(200).json({
+          articles: paginatedArticles,
+          totalPages: totalPages,
+        });
+      }
+    } catch (error) {
+      res.status(500).send("Error retrieving videos: " + error.message);
+    }
+  });
 });
