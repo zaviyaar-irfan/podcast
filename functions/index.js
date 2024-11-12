@@ -241,6 +241,30 @@ exports.scheduledFetchVideos = functions.pubsub
     }
   });
 
+exports.addChannel2 = onRequest(async (req, res) => {
+  cors(req, res, async () => {
+    try {
+      const { name, channelLink, image } = req.body;
+      const parts = channelLink.split("/");
+      const channelSlug = parts[parts.length - 1];
+      var channelId = channelSlug;
+      if (channelSlug.includes("@")) {
+        channelId = await getChannelIdForCustom(channelSlug);
+      }
+      if (!name || !channelLink || !channelId) {
+        return res.status(400).send("Name and channelLink are required");
+      }
+      const docRef = await db
+        .collection("channels")
+        .add({ name, channelLink: channelId, image: image });
+      res.status(201).send("Document added Successfully");
+    } catch (error) {
+      console.error("Error adding channel:", error);
+      res.status(400).send("Error adding channel: " + error.message);
+    }
+  });
+});
+
 exports.getPaginatedVideos = onRequest(async (req, res) => {
   cors(req, res, async () => {
     try {
@@ -269,6 +293,53 @@ exports.getPaginatedVideos = onRequest(async (req, res) => {
         id: doc.id,
         ...doc.data(),
       }));
+
+      res.status(200).json({ videos: videos, totalPages: totalPages });
+    } catch (error) {
+      res.status(500).send("Error retrieving videos: " + error.message);
+    }
+  });
+});
+
+exports.getPaginatedFilteredVideos = onRequest(async (req, res) => {
+  cors(req, res, async () => {
+    try {
+      const { page = 1, search = "" } = req.query;
+      const pageSize = 10;
+
+      const videosRef = db.collection("videos").orderBy("publishedAt", "desc");
+
+      // Step 2: Fetch the entire collection
+      const totalSnapshot = await videosRef.get();
+
+      const filteredVideos = totalSnapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .filter(
+          (video) =>
+            video?.title &&
+            video?.title?.toLowerCase()?.includes(search?.toLowerCase())
+        ); // Filter titles containing "abc"
+
+      // Step 3: Calculate the total count of filtered results
+      const totalFilteredCount = filteredVideos.length;
+
+      // Step 4: Calculate the total number of pages based on filtered data
+      const totalPages = Math.ceil(totalFilteredCount / pageSize);
+
+      // Step 5: Calculate skip based on filtered count
+      const skip = (Number(page) - 1) * pageSize;
+
+      // Step 6: Paginate the filtered videos
+      const paginatedVideos = filteredVideos.slice(skip, skip + pageSize);
+
+      // Step 7: Send the response with the filtered and paginated videos
+      res.status(200).json({
+        videos: paginatedVideos,
+        totalPages: totalPages,
+      });
 
       res.status(200).json({ videos: videos, totalPages: totalPages });
     } catch (error) {
